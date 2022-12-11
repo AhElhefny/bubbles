@@ -30,7 +30,7 @@
                             @csrf
 
 							<div class="text-center mb-10">
-								<h1 class="text-dark mb-3">تسجيل الدخول. </h1>
+								<h1 class="text-dark mb-3">Sign In </h1>
 
 							</div>
 							<div class="fv-row mb-10">
