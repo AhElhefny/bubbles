@@ -1,0 +1,17 @@
+.page-item .page-prev-next-btn {
+    background-color: #ffffff !important;
+}
+
+.page-item .page-prev-next-btn:hover{
+    background-color: #e6f3fa !important;
+}
+
+#input img{
+    width: 100px;
+    height: 80px;
+}
+
+img.review {
+    width: 120px;
+    margin: 10px;
+  }
