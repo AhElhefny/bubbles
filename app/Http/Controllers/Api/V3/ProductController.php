@@ -15,7 +15,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        
+
          $products = Product::with('media')->where('available',1);
 
         if($productType = $request->get('product_type')){
@@ -24,9 +24,9 @@ class ProductController extends Controller
         }
 
          $products = ProductResource::collection($products->get());
- 
+
         return response()->json([
-            
+
             'status' => 200,
             'success' => true,
             'message' => trans('messages.get_data_success'),
@@ -48,10 +48,10 @@ class ProductController extends Controller
 
     public function categories()
     {
-      
+
         $categories = Category::with('media');
         $categories = CategoryResource::collection($categories->get());
-        
+
         return response()->json([
 
             'status' => 200,
@@ -64,10 +64,10 @@ class ProductController extends Controller
 
     public function category($id)
     {
-      
+
         $products = Product::with('media')->where('available',1);
         $products = ProductResource::collection($products->where('category_id',$id)->get());
-      
+
         return response()->json([
 
             'status' => 200,
@@ -80,7 +80,7 @@ class ProductController extends Controller
 
     public function servicedetail($id)
     {
-        
+
         $service = Product::find($id);
 
         if(!$service){
@@ -88,12 +88,12 @@ class ProductController extends Controller
             return $this->sendError([], trans('messages.not_found_data'), 404);
         }
 
-        return $this->sendResponse(new ServiceResource($service), trans('messages.get_data_success')); 
+        return $this->sendResponse(new ServiceResource($service), trans('messages.get_data_success'));
     }
 
     public function notifyMeIfAvailable(Request $request, $id)
     {
-       
+
         $product = Product::find($id);
 
         if(!$product){

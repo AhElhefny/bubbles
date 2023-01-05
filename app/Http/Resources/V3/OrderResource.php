@@ -11,14 +11,14 @@ class OrderResource extends JsonResource
 
     public function toArray($request)
     {
-        
+
         $order = $this;
         $statusText = trans('admin.orders_status_options.'.$order->status);
-    
+
         $driverData = (object) [];
         if($driver = $order->driver){
             $driverData = [
-                
+
                 'id' => $driver->id,
                 'name' => $driver->name,
                 'mobile' => $driver->mobile
@@ -26,7 +26,7 @@ class OrderResource extends JsonResource
         }
 
         return [
-            
+
             'id' => (int) $order->id ,
             'formated_number' => (int) $order->order_number,
             'route_key' => (int) $order->route_key,
@@ -42,6 +42,9 @@ class OrderResource extends JsonResource
             'firebase_id' => $order->firebase_id,
             'total' => (double) $order->total,
             'car_type' => $order->car_type,
+            'car_model' => $order->car_model,
+            'car_color' => $order->car_color,
+            'car_number' => $order->car_number,
             //'driver' => $driverData,
             'created_at' => (string) $order->created_at->format('d/m/Y h:i A')
         ];

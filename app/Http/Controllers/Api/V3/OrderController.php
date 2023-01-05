@@ -144,6 +144,9 @@ class OrderController extends Controller
                    'branch_id' =>'required',
                    'cart_id' =>'required',
                    'car_type'=>'required',
+                   'car_color'=>'required',
+                   'car_model'=>'required',
+                   'car_number'=>'required',
 
                ]);
 
@@ -232,7 +235,7 @@ class OrderController extends Controller
                     $PayResponse = $this->Pay($order);
                     // dd($PayResponse);
                     if(isset($PayResponse->errors)){
-                        
+
                         return $this->sendError([], __('messages.something went wrong'), 442);
                     }
                     $order->update(['payment_status' => $PayResponse->status,'tap_id'=>$PayResponse->id,'status'=>Order::STATUS_RESERVED]);
@@ -281,7 +284,7 @@ class OrderController extends Controller
                 $result = $this->send_notification($notification->title,$notification->content,$notification,$branchToken);
                 $result1 = $this->send_notification('your order #'. $order->id.' saved successfully',"New Order Received to vendor with "." ".$order->order_number." "."from you",$notification,$userToken);
                 // dd($result,$result1);
-                
+
                 $this->firestoreSaveOrder($order);
                 $output = $request->payment_method == 'visa' ? [
                     'url' =>$PayResponse->transaction->url,
@@ -524,12 +527,15 @@ class OrderController extends Controller
             'id'=>$order->id,
             'order_number'=>$order->order_number,
             'car_type'=>$order->car_type,
+            'car_color'=>$order->car_color,
+            'car_number'=>$order->car_number,
+            'car_model'=>$order->car_model,
             'total'=>$order->total,
             'delivery_date'=>$order->delivery_date,
             'delivery_time'=>$order->delivery_time,
             'status'=>$order->status,
             'payment_status' => $order->payment_status,
-            'branch_id' => $order->branch_id
+            'branch_id' => $order->branch_id,
         ];
 
         $bookingFire = app('firebase.firestore')

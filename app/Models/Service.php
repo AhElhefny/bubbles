@@ -17,7 +17,7 @@ class Service extends Model implements HasMedia
 
     public function rules()
     {
-        
+
         return [
 
             'title' => ['required','string',Rule::unique('services','title')->ignore($this->id)],
@@ -32,7 +32,7 @@ class Service extends Model implements HasMedia
 
         if ($media) {
 
-            return $media->getUrl();
+            return $media->getFullUrl();
         }
     }
 
@@ -51,6 +51,6 @@ class Service extends Model implements HasMedia
         return $this->belongsToMany(WorkTime::Class, 'service_work_time');
     }
 
-    
+
 
 }

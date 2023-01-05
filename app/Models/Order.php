@@ -29,6 +29,9 @@ class Order extends Model
         'discount',
         'city_id',
         'car_type',
+        'car_model',
+        'car_number',
+        'car_color',
         'branch_id',
         'sub_total',
         'tax',
@@ -42,7 +45,7 @@ class Order extends Model
     const STATUS_DELIVERED = 8;
     const STATUS_UNPAID = 99;
     const STATUS_PENDING = 10;
-    
+
 
     const ACTIVE_ORDER_STATUS_LIST = [
         self::STATUS_RESERVED,
@@ -56,7 +59,7 @@ class Order extends Model
         self::STATUS_DELIVERED,
        // self::STATUS_DELETE,
 //      self::STATUS_PENDING,
-    
+
     ];
 
     const ON_PROCESS_ORDER_STATUS_LIST = [
@@ -71,14 +74,14 @@ class Order extends Model
    public function getOrderNumberAttribute()
    {
        return (int) '99'.$this->id;
-    
+
    }
 
     public function getProductsRatingAttribute()
     {
-        
+
         $ratingData = $this->ratings->where('type', 'products')->first();
-        
+
         return $ratingData?(float) $ratingData->rating:0;
     }
 
@@ -110,7 +113,7 @@ class Order extends Model
     public function services()
     {
         return $this->belongsToMany(Service::class, 'order_services', 'order_id', 'service_id')
-        
+
             ->withPivot(['price', 'city_id']);
     }
 

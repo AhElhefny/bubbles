@@ -16,7 +16,7 @@ use App\Models\Branch;
 
 class CartController extends Controller
 {
-    
+
      public function addToCart(Request $request)
     {
 
@@ -32,7 +32,7 @@ class CartController extends Controller
 
         $authUser = auth()->guard('api')->user();
 
-    
+
         if (!$authUser){
                 $userCart = $request->cart_id ? Cart::find($request->cart_id) : null;
                 $userCart = $userCart ?: Cart::create([ 'status' => 1,'branch_id' => $request->branch_id]);
@@ -54,8 +54,8 @@ class CartController extends Controller
         }
 
         $userCartItems = CartItem::where('cart_id','=',$userCart->id)->get();
-        
-        
+
+
         if(isset($userCartItems) && in_array($request->service_id,$userCartItems->pluck('service_id')->toArray()) ==1){
             return response()->json([
                 'status' => 422,
@@ -66,7 +66,7 @@ class CartController extends Controller
 
 
 
-//        add item to cart
+        //        add item to cart
         $userCart->items()->create(['service_id' => $request->service_id , 'amount' => 1]);
 
 
@@ -94,11 +94,12 @@ class CartController extends Controller
             ]
        ]);
 
-     }
-    
+    }
 
-   /* public function addserviceToCart(Request $request)
-    {
+
+    /*
+        public function addserviceToCart(Request $request)
+        {
         if(!Product::find($request->service_id)){
 
             return response()->json([
@@ -112,9 +113,9 @@ class CartController extends Controller
             $hasUserId = User::find($request->user_id)?true:false;
             $cartData = [];
             if($hasUserId){
- 
+
               $cart = Cart::updateOrCreate(['user_id' => $request->user_id, 'status' => 1],['user_id' => $request->user_id]);
-           
+
             }else{
 
             $device_id = $request->device_id;
@@ -140,38 +141,38 @@ class CartController extends Controller
 
                 }
              }
- 
+
              $cartItem = CartItem::where('cart_id', $cart->id)->where('product_id', $request->service_id)->orderBy('created_at', 'desc')->first();
-         
+
              if($cartItem){
-            
+
                 }
 
               else{
 
                $cartItem = CartItem::create([
 
-                        'cart_id' => $cart->id, 
+                        'cart_id' => $cart->id,
                         'product_id' => $request->service_id,
-                        'size_id'=> $request->size_id , 
+                        'size_id'=> $request->size_id ,
                         'car_type'=> $request->car_type,
                         'mattress_type_id'=> $request->mattress_id,
-                        'city_id' => $request->city_id, 
+                        'city_id' => $request->city_id,
                         'amount' => 1
 
                  ]);
               }
-         
+
               $additions = Additions::whereIn('id',$request->get('additions_ids',[]))->get();
-         
+
              foreach($additions as $addition)
              {
-                
+
                   $getaddition = CartAddition::where(['addition_id'=> $addition->id , 'service_id'=>$request->service_id])->get();
 
                  if(count($getaddition) < 1)
                   {
-                    
+
                         $insert = new CartAddition;
                         $insert->cartitem_id = $cartItem->id;
                         $insert->addition_id = $addition->id;
@@ -181,10 +182,10 @@ class CartController extends Controller
                         $insert->save();
                    }
                 }
-   
+
                 $items = $cart->items()->with('serviceProduct')->get();
                 $itemsCount = $items->sum('amount');
-     
+
                 $sumPricesArray = [];
                 $productPrices = [];
                 $servicePrices = [] ;
@@ -211,14 +212,14 @@ class CartController extends Controller
 
                  }
              }
-         
+
             $sumPrices = array_sum($sumPricesArray);
             $sumproducts = array_sum($productPrices);
             $sumservices = array_sum($servicePrices);
 
             $productItemArray= [];
             $serviceItemArray= [];
- 
+
             if($items->count()){
                  foreach($items as $item){
                      $product = $item->product;
@@ -238,7 +239,7 @@ class CartController extends Controller
                         }
                   }
               }
- 
+
              if($items->count()){
 
                foreach($items as $item){
@@ -265,31 +266,32 @@ class CartController extends Controller
                             'mattress_type_price' => (double) isset($Matterss) ? $Matterss->price:null,
                             'car_type'=>$item->car_type,
                             'additions' => $Additions
-                       
+
                       ];
                    }
                 }
              }
- 
+
              return response()->json([
- 
+
                 'status' => 200,
                 'success' => true,
                 'message' => 'تم جلب الداتا بنجاح',
                 'data' => ['cart_id' => (int) $cart->id, 'items_count' => (int) $itemsCount, 'items_sum_prices' => (float) $sumPrices ,'products_prices'=>$sumproducts ,'services_prices'=>$sumservices ,'products' => $productItemArray , 'services'=>$serviceItemArray]
 
             ]);
-      }*/
+      }
+    */
 
      public function removeFromCart(Request $request, $cart_id, $service_id)
      {
-       
+
           $cart = Cart::where('id',$cart_id)->where('status', 1)->first();
 
           if(!$cart){
 
              return response()->json([
-                
+
                     'status' => 422,
                     'success' => false,
                     'message' => trans('messages.cart_empty'),
@@ -299,7 +301,7 @@ class CartController extends Controller
 
          $device_id = $cart->device_id;
          $item = CartItem::where('cart_id', $cart_id)->where('service_id', $service_id)->orderBy('created_at', 'desc')->first();
-        
+
            if(!$item){
 
                return response()->json([
@@ -341,7 +343,7 @@ class CartController extends Controller
                     $sumPricesArray[] = $allPrice * $amount;
                }
            }
- 
+
           $sumPrices = array_sum($sumPricesArray);
 
           $final_price =  $sumPrices ;// + $tax ;
@@ -357,7 +359,7 @@ class CartController extends Controller
 
     public function emptyCart(Request $request, $cart_id)
     {
-        
+
            $cart = Cart::where('id',$cart_id)->where('status', 1)->first();
 
            if(!$cart){
@@ -367,7 +369,7 @@ class CartController extends Controller
                     'status' => 422,
                     'success' => false,
                     'message' => trans('messages.cart_empty'),
-                    
+
                 ]);
              }
 
@@ -383,9 +385,9 @@ class CartController extends Controller
 
     public function userCart(Request $request)
     {
-       
+
         $cart = Cart::where('user_id', auth('api')->id())->where('status', 1)->orderBy('created_at', 'desc')->first();
-        
+
         return response()->json([
 
             'status' => 200,
@@ -398,7 +400,7 @@ class CartController extends Controller
 
     public function cartItems(Request $request, $cart_id)
     {
-        
+
         $cart = Cart::where('id', $cart_id)->where('status', 1)->first();
 
         if(!$cart){
@@ -427,7 +429,7 @@ class CartController extends Controller
                 // $sellertax = BranchesTax::where('seller_id',$itemService->seller_id)->first();
 
                 //    if($sellertax){
- 
+
                 //       if ($sellertax->tax_type == 'percent') {
 
                 //           $tax += ($itemService->price * $sellertax->tax) / 100;
@@ -474,10 +476,10 @@ class CartController extends Controller
                   'data' => ['cart_id' => (int) $cart->id, 'branch_id'=>(int)$cart->branch_id ,'items_count' => (int) $itemsCount , 'items_sum_prices' => (float) $sumPrices , 'tax'=>$tax , 'final_prices' => (float) $final_price +$tax, 'services'=>$serviceItemArray]
             ]);
       }
-    
+
       public function updateCartUser(Request $request, $cart_id)
       {
-        
+
             $cart = Cart::where('id', $cart_id)->where('status', 1)->first();
 
             if(!$cart){
@@ -497,11 +499,11 @@ class CartController extends Controller
                $newCartItems = CartItem::where('cart_id', $cart->id)->update(['cart_id' => $userCart->id]);
           }
           else{
-             
+
               $cart->update(['user_id' => $user->id]);
               $userCart = $cart;
           }
- 
+
            return response()->json([
 
                'status' => 200,
@@ -513,7 +515,7 @@ class CartController extends Controller
 
     public function serviceWorkTimes($cart_id)
     {
-       
+
         $items=CartItem::where('cart_id',$cart_id)->select('service_id');
 
         if ($items->count() > 0) {
@@ -521,9 +523,9 @@ class CartController extends Controller
             $services_ids=$items->pluck('service_id')->toArray();
             $work_time_ids=ServiceWorktime::whereIn('service_id',$services_ids)->select('work_time_id')->pluck('work_time_id')->toArray();
             $work_times=WorkTime::whereIn('id',$work_time_ids)->get();
-         
+
             return response()->json([
-                
+
                'status' => 200,
                'success' => true,
                'data' => ['work_times' => $work_times,'message' => 'list of work times'],
@@ -531,7 +533,7 @@ class CartController extends Controller
            ]);
         }
     }
-    
+
     public function add_cart_to_user($cart_id){
          $oldCart = Cart::where(['user_id' => auth('api')->user()->id, 'status' => 1])->first();
          $newCart = Cart::where(['id' => $cart_id,'status' => 1])->first();
@@ -592,6 +594,6 @@ class CartController extends Controller
             'status' => 200,
             'success' => true,
             'data' => ['cart_id' => $oldCart->id,'message' => __('products::alert.added_user_to_cart_successfully')],
-        ]); 
+        ]);
     }
  }

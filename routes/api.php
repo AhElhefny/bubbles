@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
        'prefix' => 'v3',
        'namespace' => 'Api\V3',
-    
+
     ], function () {
 
         Route::post('contact-us/send', 'ContactUsController@send');
@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Route;
             // Route::post('{cart_id}/add-to-user', 'CartController@updateCartUser')->middleware('auth:api');add_cart_to_user
             Route::post('{cart_id}/add-to-user', 'CartController@add_cart_to_user')->middleware('auth:api');
 
-            
+
         });
 
         Route::get('branches','BranchController@index');
@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('search/services','ServiceController@search');
 
         Route::prefix('services')->group(function () {
-            Route::get('/{service}/show', 'ProductController@servicedetail');
+            Route::get('/{service}/show', 'ServiceController@show');
         });
 
         Route::prefix('categories')->group(function () {
@@ -60,7 +60,7 @@ use Illuminate\Support\Facades\Route;
         });
 
         Route::prefix('settings')->group(function () {
-            
+
             Route::get('general', 'SettingController@general');
             Route::get('cities', 'SettingController@cities');
             Route::get('payment-methods', 'SettingController@paymentMethods');
@@ -84,7 +84,7 @@ use Illuminate\Support\Facades\Route;
 
             });
         });
-         
+
        Route::middleware('auth:api')->group(function () {
         Route::prefix('orders')->group(function () {
 
@@ -104,7 +104,7 @@ use Illuminate\Support\Facades\Route;
             Route::post('update-status', 'OrderController@changeOrderStatus');
             Route::post('activate-orders', 'OrderController@orderActivate');
 
-        }); 
+        });
 
         Route::prefix('user')->group(function () {
 
@@ -127,10 +127,10 @@ use Illuminate\Support\Facades\Route;
       });
 
         Route::prefix('pages')->group(function () {
-       
+
             Route::get('/', 'PageController@index');
             Route::get('{slug}', 'PageController@page');
-           
+
         });
 
         Route::prefix('payments')->group(function () {

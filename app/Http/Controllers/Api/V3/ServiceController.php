@@ -13,14 +13,14 @@ use Validator;
 
 class ServiceController extends Controller
 {
-   
+
     public function index(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'category_id'=>'exists:categories,id',
             'branch_id'=>'exists:branches,id'
         ]);
-        
+
         if($validator->fails()) {
 
             return $this->sendError(error_processor($validator), trans('messages.validation_error'), 442);
@@ -37,7 +37,7 @@ class ServiceController extends Controller
             $branch=Branch::find($request->branch_id);
             $services=$services->where('seller_id',$branch->seller_id);
         }
-        
+
         $services=$services->paginate($pagination);
         foreach($services as $service){
             $service['img'] =(string) url( $service->img);
@@ -60,14 +60,14 @@ class ServiceController extends Controller
         }
         $service['img'] = url($service->img);
         return response()->json([
-            
+
             'status' => 200,
             'success' => true,
             'message' => trans('messages.get_data_success'),
-            "service" => $service
+            "service" => new ServiceResource($service)
         ]);
     }
-    
+
     public function search(Request $request){
 
         $latitude = $request->headers->get('lat') ? $request->headers->get('lat') : 0 ;

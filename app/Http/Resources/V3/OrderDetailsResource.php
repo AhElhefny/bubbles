@@ -12,11 +12,11 @@ class OrderDetailsResource extends JsonResource
 {
     public function toArray($request)
     {
-        
+
         $order = $this;
         $statusText = trans('admin.orders_status_options.'.$order->status);
         $driverData = (object) [];
-        
+
         if($driver = $order->driver){
 
             $driverData = [
@@ -48,20 +48,23 @@ class OrderDetailsResource extends JsonResource
             'can_cancel' =>  Operation::canCancelOrder($order),
            // 'driver' => $driverData,
             'car_type' => $order->car_type,
+            'car_model' => $order->car_model,
+            'car_color' => $order->car_color,
+            'car_number' => $order->car_number,
             'firebase_id' => $order->firebase_id,
             'created_at' => (string) $order->created_at->format('d/m/Y h:i A'),
             'branch_id' => $order->branch_id
         ];
-    } 
+    }
 
 
     public function loadServices($services)
     {
-      
+
         return collect($services)->map(function ($service) {
-            
+
             $tax=0;
-            
+
             if($service->tax_type=='amount'){
 
                 $tax=$service->tax;
@@ -84,8 +87,8 @@ class OrderDetailsResource extends JsonResource
     }
 
     public function loadPriceses($order)
-    {  
-            
+    {
+
            return collect([
 
                'sub_total' => round((double) $order->sub_total,2),
