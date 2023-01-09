@@ -230,6 +230,11 @@ class OrderController extends Controller
 
                 DB::beginTransaction();
                 $order = Order::create($data);
+                if($request->hasFile('car_image')){
+                    $order->addMedia($request->file('car_image'))
+                        ->withCustomProperties(['root' => 'user_prr'.uniqid()])
+                        ->toMediaCollection('order_car_image');
+                }
                 if($request->payment_method == 'visa'){
                     $order->update(['status'=>Order::STATUS_UNPAID]);
                     $PayResponse = $this->Pay($order);
@@ -345,6 +350,11 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             $newOrder = Order::create($data);
+               if($request->hasFile('car_image')){
+                   $newOrder->addMedia($request->file('car_image'))
+                       ->withCustomProperties(['root' => 'user_prr'.uniqid()])
+                       ->toMediaCollection('order_car_image');
+               }
             Checkout::getServices($order, $newOrder);
             $address = OrderShippingAddress::where('order_id',$request->order_id)->first();
             $addressRequest['address'] = $address->address;
@@ -536,6 +546,7 @@ class OrderController extends Controller
             'status'=>$order->status,
             'payment_status' => $order->payment_status,
             'branch_id' => $order->branch_id,
+            'accepted' => null
         ];
 
         $bookingFire = app('firebase.firestore')

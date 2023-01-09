@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Order extends Model
+class Order extends Model implements HasMedia
 {
-
+    use HasMediaTrait;
     protected $table = 'orders';
     protected $fillable = [
         'firebase_id',
@@ -37,6 +39,8 @@ class Order extends Model
         'tax',
         'tap_id'
     ];
+
+    public $mediaImageCollectionName = 'order_car_image';
 
     const STATUS_RESERVED = 0;
     const STATUS_PROCESSING = 1;
@@ -157,6 +161,17 @@ class Order extends Model
     public function receipt()
     {
         return $this->hasOne(OrderReceipt::class, 'order_id');
+    }
+
+    public function getImgAttribute()
+    {
+
+        $media = $this->getFirstMedia($this->mediaImageCollectionName);
+
+        if ($media) {
+
+            return $media->getFullUrl();
+        }
     }
 
 }

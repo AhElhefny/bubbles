@@ -51,6 +51,7 @@ class OrderDetailsResource extends JsonResource
             'car_model' => $order->car_model,
             'car_color' => $order->car_color,
             'car_number' => $order->car_number,
+            'car_image' => $order->img,
             'firebase_id' => $order->firebase_id,
             'created_at' => (string) $order->created_at->format('d/m/Y h:i A'),
             'branch_id' => $order->branch_id

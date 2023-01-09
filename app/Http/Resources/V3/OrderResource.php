@@ -45,6 +45,7 @@ class OrderResource extends JsonResource
             'car_model' => $order->car_model,
             'car_color' => $order->car_color,
             'car_number' => $order->car_number,
+            'car_image' => $order->img,
             //'driver' => $driverData,
             'created_at' => (string) $order->created_at->format('d/m/Y h:i A')
         ];
