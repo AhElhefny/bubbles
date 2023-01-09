@@ -535,14 +535,14 @@ class CartController extends Controller
     }
 
     public function add_cart_to_user($cart_id){
-         $oldCart = Cart::where(['user_id' => auth('api')->user()->id, 'status' => 1])->first();
-         $newCart = Cart::where(['id' => $cart_id,'status' => 1])->first();
+        $oldCart = Cart::where(['user_id' => auth('api')->user()->id, 'status' => 1])->first();
+        $newCart = Cart::where(['id' => $cart_id,'status' => 1])->first();
 
         //new and old not exist
         if(!$newCart && !$oldCart){
             return response()->json([
                 'success' => true,
-                // 'message' => trans('messages.cart_empty')
+                'message' => trans('messages.cart_empty')
             ],200);
         }
 

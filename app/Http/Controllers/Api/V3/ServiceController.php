@@ -40,7 +40,7 @@ class ServiceController extends Controller
 
         $services=$services->paginate($pagination);
         foreach($services as $service){
-            $service['img'] =(string) url( $service->img);
+            $service['img'] = url($service->img);
         }
 
         return response()->json([
