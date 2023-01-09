@@ -659,4 +659,17 @@ class OrderController extends Controller
         }
     }
 
+    public function accepted(Request $request){
+         $order = Order::find($request->order_id);
+         $order->update(['accepted'=>$request->accepted]);
+        $orderFir = app('firebase.firestore')
+            ->database()
+            ->collection('orders')
+            ->Document('branch'.$order->branch_id)
+            ->collection('orders')
+            ->Document($order->firebase_id);
+        $orderFir->update([['path'=>'accepted','value'=>$request->accepted]]);
+        return $this->sendResponse([], trans('messages.get_data_success'));
+    }
+
 }

@@ -103,6 +103,7 @@ use Illuminate\Support\Facades\Route;
             Route::get('branch-orders', 'OrderController@washerOrders');
             Route::post('update-status', 'OrderController@changeOrderStatus');
             Route::post('activate-orders', 'OrderController@orderActivate');
+            Route::post('acceptOrRefuse',[OrderController::class,'accepted']);
 
         });
 

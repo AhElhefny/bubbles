@@ -34,6 +34,7 @@ class Order extends Model implements HasMedia
         'car_model',
         'car_number',
         'car_color',
+        'accepted',
         'branch_id',
         'sub_total',
         'tax',
