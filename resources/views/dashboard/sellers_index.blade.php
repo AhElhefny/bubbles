@@ -25,8 +25,8 @@
                           </div>
                     </div>
                 </div>
-   
-                 <div class="row gy-5 g-xl-8">       
+
+                 <div class="row gy-5 g-xl-8">
                     <div class="col-xxl-4">
                         <div class="card card-xxl-stretch">
                            <div class="card-header border-0 bg-danger py-5">
@@ -34,7 +34,7 @@
                                <div class="card-toolbar">
                            </div>
                      </div>
-           
+
                       <div class="card-body p-0">
                            <div class="mixed-widget card-rounded-bottom bg-danger" data-kt-color="danger" style="height: 200px"></div>
                                <div class="card-p mt-n20 position-relative">
@@ -75,13 +75,13 @@
                                                 <h3 class="card-title align-items-start flex-column">
                                                     <span class="card-label fw-bolder fs-3 mb-1">{{__('admin.lastorders')}}</span>
                                                </h3>
- 
+
                                            <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover">
                                                 <a href="{{route('orders.sellers')}}" class="btn btn-sm btn-light btn-active-primary">
                                                    {{__('admin.orders')}}</a>
                                                 </div>
                                            </div>
-                    
+
                                            <div class="card-body py-3">
                                                <div class="table-responsive">
                                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
@@ -96,7 +96,7 @@
                                                             </tr>
                                                       </thead>
                                                   <tbody>
-                                                     @foreach($orders as $order)
+                                                     @foreach($orders->take(5) as $order)
                                                  <tr>
                                                    <td>
                                                       <div class="d-flex align-items-center">
@@ -106,11 +106,11 @@
                                                           </div>
                                                      </div>
                                                   </td>
-                                            
+
                                                    <td>
-                                                       <a href="#" class="text-dark fw-bolder text-hover-primary d-block fs-6">{{ $order->city->name }}</a>
+                                                       <a href="#" class="text-dark fw-bolder text-hover-primary d-block fs-6">{{$order->city->name }}</a>
                                                    </td>
-    
+
                                                    <td> {{$order->delivery_date }}
                                                        <div class="fw-bold fs-6 text-gray-400"><i class="fa fa-clock"></i> {{$order->delivery_end_time}}</div>
                                                    </td>
@@ -133,13 +133,13 @@
                           </div>
                     </div>
                </div>
-          </div>               
+          </div>
 
    <div class="d-flex justify-content-end flex-shrink-0">
-                                    
+
 @endsection
 @section('after_content')
-    
+
     <div id="kt_activities" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="activities" data-kt-drawer-activate="true" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '900px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_activities_toggle" data-kt-drawer-close="#kt_activities_close">
         <div class="card shadow-none rounded-0">
             <div class="card-header" id="kt_activities_header">
@@ -157,7 +157,7 @@
                           </button>
                     </div>
               </div>
-          
+
              <div class="card-body position-relative" id="kt_activities_body">
                  <div id="kt_activities_scroll" class="position-relative scroll-y me-n5 pe-5" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_activities_body" data-kt-scroll-dependencies="#kt_activities_header, #kt_activities_footer" data-kt-scroll-offset="5px">
                        <div class="timeline">
@@ -173,15 +173,15 @@
 										</span>
                                 </div>
                             </div>
-                         
+
                             <div class="timeline-content mb-10 mt-n1">
                                 <div class="pe-3 mb-5">
                                     <div class="fs-5 fw-bold mb-2">There are 2 new tasks for you in “AirPlus Mobile APp” project:</div>
-                                   
+
                                     <div class="d-flex align-items-center mt-1 fs-6">
                                         <!--begin::Info-->
                                         <div class="text-muted me-2 fs-7">Added at 4:23 PM by</div>
-                                     
+
                                         <div class="symbol symbol-circle symbol-25px" data-bs-toggle="tooltip" data-bs-boundary="window" data-bs-placement="top" title="Nina Nilson">
                                             <img src="{{asset('dashboard/dist/assets/media/avatars/150-11.jpg')}}" alt="img" />
                                         </div>
@@ -189,17 +189,17 @@
                                     </div>
                                     <!--end::Description-->
                                 </div>
-                               
+
                                 <div class="overflow-auto pb-5">
                                     <!--begin::Record-->
                                     <div class="d-flex align-items-center border border-dashed border-gray-300 rounded min-w-750px px-7 py-3 mb-5">
                                         <!--begin::Title-->
                                         <a href="#" class="fs-5 text-dark text-hover-primary fw-bold w-375px min-w-200px">Meeting with customer</a>
-                                      
+
                                         <div class="min-w-175px pe-2">
                                             <span class="badge badge-light text-muted">Application Design</span>
                                         </div>
-                                      
+
                                         <div class="symbol-group symbol-hover flex-nowrap flex-grow-1 min-w-100px pe-2">
                                             <!--begin::User-->
                                             <div class="symbol symbol-circle symbol-25px">
@@ -210,13 +210,13 @@
                                             <div class="symbol symbol-circle symbol-25px">
                                                 <img src="{{asset('dashboard/dist/assets/media/avatars/150-11.jpg')}}" alt="img" />
                                             </div>
-                                         
+
                                             <div class="symbol symbol-circle symbol-25px">
                                                 <div class="symbol-label fs-8 fw-bold bg-primary text-inverse-primary">A</div>
                                             </div>
                                             <!--end::User-->
                                         </div>
-                                       
+
                                         <div class="min-w-125px pe-2">
                                             <span class="badge badge-light-primary">In Progress</span>
                                         </div>
@@ -603,11 +603,11 @@
                             </div>
                             <!--end::Timeline content-->
                         </div>
-                        
+
                         <div class="timeline-item">
                             <!--begin::Timeline line-->
                             <div class="timeline-line w-40px"></div>
-                            
+
                             <div class="timeline-icon symbol symbol-circle symbol-40px">
                                 <div class="symbol-label bg-light">
                                     <!--begin::Svg Icon | path: icons/duotone/Communication/Write.svg')}}-->
@@ -620,7 +620,7 @@
                                     <!--end::Svg Icon-->
                                 </div>
                             </div>
-                           
+
                             <div class="timeline-content mb-10 mt-n1">
                                 <!--begin::Timeline heading-->
                                 <div class="pe-3 mb-5">
@@ -1002,7 +1002,7 @@
                         </div>
                         <!--end::Wrapper-->
                     </div>
-                  
+
                     <div class="d-flex justify-content-start mb-10">
                         <!--begin::Wrapper-->
                         <div class="d-flex flex-column align-items-start">
@@ -1012,7 +1012,7 @@
                                 <div class="symbol symbol-35px symbol-circle">
                                     <img alt="Pic" src="{{asset('dashboard/dist/assets/media/avatars/150-15.jpg')}}" />
                                 </div>
-                           
+
                                 <div class="ms-3">
                                     <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">Brian Cox</a>
                                     <span class="text-muted fs-7 mb-1">5 Hours</span>
@@ -1026,7 +1026,7 @@
                         </div>
                         <!--end::Wrapper-->
                     </div>
-              
+
                     <div class="d-flex justify-content-end mb-10 d-none" data-kt-element="template-out">
                         <!--begin::Wrapper-->
                         <div class="d-flex flex-column align-items-end">
@@ -1037,16 +1037,16 @@
                                     <span class="text-muted fs-7 mb-1">Just now</span>
                                     <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">You</a>
                                 </div>
-                           
+
                                 <div class="symbol symbol-35px symbol-circle">
                                     <img alt="Pic" src="{{asset('dashboard/dist/assets/media/avatars/150-26.jpg')}}" />
                                 </div>
                             </div>
-                         
+
                             <div class="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end" data-kt-element="message-text"></div>
                         </div>
                     </div>
-             
+
                     <div class="d-flex justify-content-start mb-10 d-none" data-kt-element="template-in">
                         <!--begin::Wrapper-->
                         <div class="d-flex flex-column align-items-start">
@@ -1081,7 +1081,7 @@
                             <i class="bi bi-upload fs-3"></i>
                         </button>
                     </div>
-               
+
                     <button class="btn btn-primary" type="button" data-kt-element="send">Send</button>
                 </div>
             </div>

@@ -45,26 +45,31 @@ class OrderController extends Controller
 
          if (isset($request->status)) {
 
-              $orders=$orders->where('status',$request->status);
-          }
+             $orders=$orders->where('status',$request->status);
+         }
 
-          $orders = OrderResource::collection($orders->orderBy('id', 'desc')->paginate(10));
+         $orders = OrderResource::collection($orders->orderBy('id', 'desc')->paginate(10));
 
-          return $this->sendResponse($orders->resource, trans('messages.get_data_success'));
+         return $this->sendResponse($orders->resource, trans('messages.get_data_success'));
       }
 
       public function washerOrders(Request $request)
       {
 
             $branch = Branch::where('user_id',auth('api')->user()->id)->first();
-            $orders = Order::notPending()->where('branch_id',$branch->id)->where('status','!=',99);
+            $orders = Order::where('branch_id',$branch->id)->where('status','!=',99);
              if($orderNumber = $request->order_number){
 
                   $orders->where('id',$orderNumber);
              }
              if(isset($request->status)){
-
-                 $orders->where('status',$request->status);
+                if($request->status == 0){
+                    $orders->whereIn('status',[Order::STATUS_NEW , Order::STATUS_PENDING]);
+                }
+                elseif($request->status == 8){
+                    $orders->whereIn('status',[Order::STATUS_DELIVERED , Order::STATUS_CANCELED]);
+                }else
+                    $orders->where('status',$request->status);
              }
 
             $orders = OrderResource::collection($orders->orderBy('id', 'desc')->paginate(10));
@@ -211,16 +216,17 @@ class OrderController extends Controller
                 }
 
 
-
                 $data = $request->all();
                 $data['user_id'] = $authUser->id;
                 $data['payment_status'] = false;
-                $data['city_id'] = $cityId;
+                $data['city_id'] = $cityId??$request->city_id;
                 $data['sub_total']=$servicestotal;
                 $data['total']= $total;
                 $data['tax']=$tax;
                 $data['coupon_discount'] = $coupon_discount;
-                $data['status'] = Order::STATUS_RESERVED;
+                $data['seller_id'] = $branch_details->seller_id;
+//                $data['status'] = Order::STATUS_RESERVED;
+                $data['status'] = Order::STATUS_PENDING;
                 $data['last_payment_reference_id'] = hexdec(uniqid());
                 $data['origin_payment_method'] = $request->payment_method;
                 $data['branch_id'] = $request->branch_id;
@@ -243,7 +249,8 @@ class OrderController extends Controller
 
                         return $this->sendError([], __('messages.something went wrong'), 442);
                     }
-                    $order->update(['payment_status' => $PayResponse->status,'tap_id'=>$PayResponse->id,'status'=>Order::STATUS_RESERVED]);
+//                    $order->update(['payment_status' => $PayResponse->status,'tap_id'=>$PayResponse->id,'status'=>Order::STATUS_RESERVED]);
+                    $order->update(['payment_status' => $PayResponse->status,'tap_id'=>$PayResponse->id,'status'=>Order::STATUS_NEW]);
                     $order->user()->update(['last_payment_reference_id' => $PayResponse->id]);
                 }
                 Checkout::saveServices($order,  $items);
@@ -338,7 +345,8 @@ class OrderController extends Controller
             $data['total']=$order->total;
             $data['tax']=$order->tax;
             $data['coupon_discount'] = $order->coupon_discount;
-            $data['status'] = in_array($paymentMethod->gateway, ['cash', 'bank'])?Order::STATUS_RESERVED:Order::STATUS_PENDING;
+            $data['status'] = Order::STATUS_PENDING;
+//            $data['status'] = in_array($paymentMethod->gateway, ['cash', 'bank'])?Order::STATUS_RESERVED:Order::STATUS_PENDING;
             $data['last_payment_reference_id'] = hexdec(uniqid());
             $data['origin_payment_method'] =$order->origin_payment_method ;
             $data['branch_id'] = $order->branch_id;
@@ -662,13 +670,18 @@ class OrderController extends Controller
     public function accepted(Request $request){
          $order = Order::find($request->order_id);
          $order->update(['accepted'=>$request->accepted]);
-        $orderFir = app('firebase.firestore')
+         if($request->accepted == 0){
+             $order->update(['status' => Order::STATUS_CANCELED]);
+         }else
+            $order->update(['status' => Order::STATUS_NEW]);
+         $orderFir = app('firebase.firestore')
             ->database()
             ->collection('orders')
             ->Document('branch'.$order->branch_id)
             ->collection('orders')
             ->Document($order->firebase_id);
-        $orderFir->update([['path'=>'accepted','value'=>$request->accepted]]);
+         $orderFir->update([['path'=>'accepted','value'=>$request->accepted]]);
+         $orderFir->update([['path'=>'status','value'=>$order->status]]);
         return $this->sendResponse([], trans('messages.get_data_success'));
     }
 

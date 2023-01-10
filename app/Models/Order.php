@@ -38,12 +38,14 @@ class Order extends Model implements HasMedia
         'branch_id',
         'sub_total',
         'tax',
-        'tap_id'
+        'tap_id',
+        'seller_id'
     ];
 
     public $mediaImageCollectionName = 'order_car_image';
 
-    const STATUS_RESERVED = 0;
+//    const STATUS_RESERVED = 0;
+    const STATUS_NEW = 0;
     const STATUS_PROCESSING = 1;
     const STATUS_SHIPPING = 3;
     const STATUS_CANCELED = 5;
@@ -53,7 +55,8 @@ class Order extends Model implements HasMedia
 
 
     const ACTIVE_ORDER_STATUS_LIST = [
-        self::STATUS_RESERVED,
+//        self::STATUS_RESERVED,
+        self::STATUS_NEW,
         self::STATUS_PROCESSING,
 //        self::STATUS_SCHEDULED,
         self::STATUS_SHIPPING,
@@ -68,7 +71,8 @@ class Order extends Model implements HasMedia
     ];
 
     const ON_PROCESS_ORDER_STATUS_LIST = [
-        self::STATUS_RESERVED,
+//        self::STATUS_RESERVED,
+        self::STATUS_NEW,
         self::STATUS_SHIPPING,
         //self::STATUS_RESCHEDULED,
 

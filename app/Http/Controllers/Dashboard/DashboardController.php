@@ -33,7 +33,7 @@ class DashboardController extends Controller
           $data['branches']=[];
           if (auth()->user()->seller) {
                // code...
-               $data['orders'] = Order::where('seller_id',auth()->user()->seller->id)->OrderBy('created_at','desc')->get()->take(5);
+//               $data['orders'] = Order::where('seller_id',auth()->user()->seller->id)->OrderBy('created_at','desc')->get()->take(5);
                $data['orders'] = Order::where('seller_id',auth()->user()->seller->id)->OrderBy('created_at','desc')->get();
                $data['branches']= Branch::where('seller_id',auth()->user()->seller->id)->get();
           }
